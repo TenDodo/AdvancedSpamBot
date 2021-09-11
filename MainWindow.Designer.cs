@@ -32,6 +32,8 @@ namespace AdvancedSpamBot
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.controlsPanel = new System.Windows.Forms.Panel();
+            this.onStartWaitMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.onStartWaitCheckBox = new System.Windows.Forms.CheckBox();
             this.addTextFromFileButton = new System.Windows.Forms.Button();
             this.ctrlAltShiftButton = new System.Windows.Forms.Button();
             this.loopsAmountMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -71,6 +73,8 @@ namespace AdvancedSpamBot
             // controlsPanel
             // 
             this.controlsPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.controlsPanel.Controls.Add(this.onStartWaitMaskedTextBox);
+            this.controlsPanel.Controls.Add(this.onStartWaitCheckBox);
             this.controlsPanel.Controls.Add(this.addTextFromFileButton);
             this.controlsPanel.Controls.Add(this.ctrlAltShiftButton);
             this.controlsPanel.Controls.Add(this.loopsAmountMaskedTextBox);
@@ -88,6 +92,29 @@ namespace AdvancedSpamBot
             this.controlsPanel.Name = "controlsPanel";
             this.controlsPanel.Size = new System.Drawing.Size(200, 514);
             this.controlsPanel.TabIndex = 0;
+            // 
+            // onStartWaitMaskedTextBox
+            // 
+            this.onStartWaitMaskedTextBox.AllowPromptAsInput = false;
+            this.onStartWaitMaskedTextBox.Enabled = false;
+            this.onStartWaitMaskedTextBox.HidePromptOnLeave = true;
+            this.onStartWaitMaskedTextBox.Location = new System.Drawing.Point(106, 405);
+            this.onStartWaitMaskedTextBox.Mask = "00000000";
+            this.onStartWaitMaskedTextBox.Name = "onStartWaitMaskedTextBox";
+            this.onStartWaitMaskedTextBox.PromptChar = ' ';
+            this.onStartWaitMaskedTextBox.Size = new System.Drawing.Size(89, 23);
+            this.onStartWaitMaskedTextBox.TabIndex = 13;
+            // 
+            // onStartWaitCheckBox
+            // 
+            this.onStartWaitCheckBox.AutoSize = true;
+            this.onStartWaitCheckBox.Location = new System.Drawing.Point(5, 407);
+            this.onStartWaitCheckBox.Name = "onStartWaitCheckBox";
+            this.onStartWaitCheckBox.Size = new System.Drawing.Size(93, 19);
+            this.onStartWaitCheckBox.TabIndex = 12;
+            this.onStartWaitCheckBox.Text = "On start wait";
+            this.onStartWaitCheckBox.UseVisualStyleBackColor = true;
+            this.onStartWaitCheckBox.CheckedChanged += new System.EventHandler(this.onStartWaitCheckBox_CheckedChanged);
             // 
             // addTextFromFileButton
             // 
@@ -264,6 +291,7 @@ namespace AdvancedSpamBot
             // errorsFlowLayoutPanel
             // 
             this.errorsFlowLayoutPanel.AutoScroll = true;
+            this.errorsFlowLayoutPanel.BackColor = System.Drawing.Color.Silver;
             this.errorsFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsFlowLayoutPanel.Location = new System.Drawing.Point(0, 45);
             this.errorsFlowLayoutPanel.Name = "errorsFlowLayoutPanel";
@@ -448,7 +476,8 @@ namespace AdvancedSpamBot
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.errorsPanel);
             this.Controls.Add(this.controlsPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
             this.Name = "MainWindow";
             this.Text = "Advanced Spam Bot";
             this.Load += new System.EventHandler(this.MainWindow_Load);
@@ -495,6 +524,8 @@ namespace AdvancedSpamBot
         private System.Windows.Forms.FlowLayoutPanel errorsFlowLayoutPanel;
         private System.Windows.Forms.Timer errorsSearchTimer;
         private System.Windows.Forms.Button addTextFromFileButton;
+        private System.Windows.Forms.MaskedTextBox onStartWaitMaskedTextBox;
+        private System.Windows.Forms.CheckBox onStartWaitCheckBox;
     }
 }
 

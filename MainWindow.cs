@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Diagnostics;
 
 namespace AdvancedSpamBot
 {
@@ -92,15 +93,32 @@ namespace AdvancedSpamBot
         private bool loopsAmount;
         private int loops;
 
+        private bool osWait;
+        private int osWaitV;
+
         List<KeyValuePair<CommandBoxType, string>> commands = new List<KeyValuePair<CommandBoxType, string>>();
         private void startButton_Click(object sender, EventArgs e)
         {
             if (!IsRunning)
             {
-                if (areErrors)
+                if (errorsList.Count > 0)
                 {
-                    MessageBox.Show("Bot cannot start due to errors, fix the errors and try again");
-                    return;
+                    int a = errorsList.Where(x => x.Type == 1).ToArray().Length;
+                    if (errorsList.Where(x => x.Type == 0).ToArray().Length > 0)
+                    {
+                        MessageBox.Show("Bot cannot start due to errors, fix the errors and try again");
+                        return;
+                    }
+                    else if (a > 0)
+                    {
+                        string b = a == 1 ? " warning" : " warnings were";
+                        if (MessageBox.Show(a.ToString() + b + " found in your script, do you want to start anyway?", "Warnings", MessageBoxButtons.YesNo) == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+
+
                 }
                 botCommandsFlowLayoutPanel.Enabled = false;
                 importButton.Enabled = false;
@@ -110,6 +128,10 @@ namespace AdvancedSpamBot
                 addTimeBreakButton.Enabled = false;
                 addTimeBreakRangeButton.Enabled = false;
                 ctrlAltShiftButton.Enabled = false;
+                loopsAmountCheckBox.Enabled = false;
+                loopsAmountMaskedTextBox.Enabled = false;
+                onStartWaitCheckBox.Enabled = false;
+                onStartWaitMaskedTextBox.Enabled = false;
                 if (loopsAmountCheckBox.Checked)
                 {
                     loops = int.Parse(loopsAmountMaskedTextBox.Text.Replace(" ", ""));
@@ -118,6 +140,15 @@ namespace AdvancedSpamBot
                 else
                 {
                     loopsAmount = false;
+                }
+                if (onStartWaitCheckBox.Checked)
+                {
+                    osWaitV = int.Parse(onStartWaitMaskedTextBox.Text.Replace(" ", ""));
+                    osWait = true;
+                }
+                else
+                {
+                    osWait = false;
                 }
                 IsRunning = true;
                 commands.Clear();
@@ -221,6 +252,15 @@ namespace AdvancedSpamBot
         private void botBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             int i = 0;
+            if (osWait)
+            {
+                ReportState = "Waiting (" + osWaitV + " ms)";
+                lock (padlock)
+                {
+                    Monitor.Wait(padlock, TimeSpan.FromMilliseconds(osWaitV));
+                }
+                
+            }
             while (IsRunning)
             {
                 i++;
@@ -244,7 +284,7 @@ namespace AdvancedSpamBot
                             final = item.Value;
                         }
                         ReportState = "Writing text...";
-                        SendKeys.SendWait(final);                        
+                        SendKeys.SendWait(final);
 
                     }
                     else if (item.Key == CommandBoxType.PressKey && IsRunning)
@@ -279,7 +319,6 @@ namespace AdvancedSpamBot
                         {
                             Monitor.Wait(padlock, TimeSpan.FromMilliseconds(wt));
                         }
-                        //Thread.Sleep(wt);
                     }
                     else if (item.Key == CommandBoxType.WaitRandom && IsRunning)
                     {
@@ -291,7 +330,6 @@ namespace AdvancedSpamBot
                         {
                             Monitor.Wait(padlock, TimeSpan.FromMilliseconds(wt));
                         }
-                        //Thread.Sleep(wt);
                     }
                     else if (item.Key == CommandBoxType.CtrlAltShift && IsRunning)
                     {
@@ -372,6 +410,10 @@ namespace AdvancedSpamBot
             addTimeBreakButton.Enabled = true;
             addTimeBreakRangeButton.Enabled = true;
             ctrlAltShiftButton.Enabled = true;
+            loopsAmountCheckBox.Enabled = true;
+            loopsAmountMaskedTextBox.Enabled = loopsAmountCheckBox.Checked;
+            onStartWaitCheckBox.Enabled = true;
+            onStartWaitMaskedTextBox.Enabled = onStartWaitCheckBox.Checked;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -398,46 +440,42 @@ namespace AdvancedSpamBot
         List<KeyValuePair<CommandBoxType, string>> errorsSearchingList = new List<KeyValuePair<CommandBoxType, string>>();
 
         List<ErrorData> errorsList = new List<ErrorData>();
+
+        bool loopAmountEnabled = false;
+        bool onStartWaitEnabled = false;
+        string loopsAmountValue;
+        string onStartWaitValue;
         public void checkingErrors()
         {
-            if (botCommandsFlowLayoutPanel.Controls.Count != 0)
+            foreach (var item in botCommandsFlowLayoutPanel.Controls)
             {
-                foreach (var item in botCommandsFlowLayoutPanel.Controls)
+                BotCommandBox a = (BotCommandBox)item;
+                switch (a.ThisType)
                 {
-                    BotCommandBox a = (BotCommandBox)item;
-                    switch (a.ThisType)
-                    {
-                        case CommandBoxType.Text:
-                            errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.Text, fixText(a.TextToWrite)));
-                            break;
-                        case CommandBoxType.PressKey:
-                            errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.PressKey, a.PressKey));
-                            break;
-                        case CommandBoxType.Wait:
-                            errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.Wait, a.WaitValue));
-                            break;
-                        case CommandBoxType.WaitRandom:
-                            errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.WaitRandom, a.WaitValue));
-                            break;
-                        case CommandBoxType.CtrlAltShift:
-                            errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.CtrlAltShift, a.CtrlAltShift));
-                            break;
-                        default:
-                            break;
-                    }
+                    case CommandBoxType.Text:
+                        errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.Text, fixText(a.TextToWrite)));
+                        break;
+                    case CommandBoxType.PressKey:
+                        errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.PressKey, a.PressKey));
+                        break;
+                    case CommandBoxType.Wait:
+                        errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.Wait, a.WaitValue));
+                        break;
+                    case CommandBoxType.WaitRandom:
+                        errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.WaitRandom, a.WaitValue));
+                        break;
+                    case CommandBoxType.CtrlAltShift:
+                        errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.CtrlAltShift, a.CtrlAltShift));
+                        break;
+                    default:
+                        break;
                 }
-                errorsBackgroundWorker.RunWorkerAsync();
             }
-            else
-            {
-                errorsFlowLayoutPanel.Controls.Clear();
-                errorsCount = 0;
-                warningsCount = 0;
-                errorsAmountLabel.Text = "        " + errorsCount + " Errors Found";
-                warningsAmountLabel.Text = "        " + warningsCount + " Warnings";
-                errorsList.Clear();
-                areErrors = false;
-            }
+            loopAmountEnabled = loopsAmountCheckBox.Checked;
+            onStartWaitEnabled = onStartWaitCheckBox.Checked;
+            loopsAmountValue = loopsAmountMaskedTextBox.Text;
+            onStartWaitValue = onStartWaitMaskedTextBox.Text;
+            errorsBackgroundWorker.RunWorkerAsync();
 
         }
         private bool elChanged = false;
@@ -516,19 +554,39 @@ namespace AdvancedSpamBot
                 i++;
 
             }
-            if (errorsList.Count != newErrorsList.Count)
+            if (errorsSearchingList.Count == 0)
+            {
+                newErrorsList.Add(new ErrorData(1, "There are no command blocks", -1));
+                warningsCount++;
+            }
+            if (loopAmountEnabled)
+            {
+                if (loopsAmountValue.Replace(" ", "") == "")
+                {
+                    newErrorsList.Add(new ErrorData(0, "Loops amount text box is empty", -1));
+                }
+            }
+            if (onStartWaitEnabled)
+            {
+                if (onStartWaitValue.Replace(" ", "") == "")
+                {
+                    newErrorsList.Add(new ErrorData(0, "On start wait text box is empty", -1));
+                }
+            }
+            if (!newErrorsList.Select(x => x.Description).SequenceEqual(errorsList.Select(x => x.Description)))
             {
                 elChanged = true;
             }
+
+
+
             errorsSearchingList.Clear();
             errorsList = newErrorsList;
         }
-        bool areErrors = false;
         private void errorsBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             errorsAmountLabel.Text = "        " + errorsCount + " Errors Found";
             warningsAmountLabel.Text = "        " + warningsCount + " Warnings";
-            areErrors = errorsCount > 0;
             errorsCount = 0;
             warningsCount = 0;
             if (elChanged)
@@ -647,6 +705,11 @@ namespace AdvancedSpamBot
                     }
                 }
             }
+        }
+
+        private void onStartWaitCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            onStartWaitMaskedTextBox.Enabled = onStartWaitCheckBox.Checked;
         }
     }
 }
