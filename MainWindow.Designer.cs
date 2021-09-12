@@ -32,6 +32,8 @@ namespace AdvancedSpamBot
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.controlsPanel = new System.Windows.Forms.Panel();
+            this.writeVariableButton = new System.Windows.Forms.Button();
+            this.addOperationOnVariableButton = new System.Windows.Forms.Button();
             this.onStartWaitMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
             this.onStartWaitCheckBox = new System.Windows.Forms.CheckBox();
             this.addTextFromFileButton = new System.Windows.Forms.Button();
@@ -60,6 +62,10 @@ namespace AdvancedSpamBot
             this.botCommandsFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.botBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.addIntegerVariableButton = new System.Windows.Forms.Button();
+            this.importVariablesButton = new System.Windows.Forms.Button();
+            this.exportVariablesButton = new System.Windows.Forms.Button();
+            this.variablesFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.historyTextBox = new System.Windows.Forms.RichTextBox();
             this.errorsBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.errorsSearchTimer = new System.Windows.Forms.Timer(this.components);
@@ -73,6 +79,8 @@ namespace AdvancedSpamBot
             // controlsPanel
             // 
             this.controlsPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.controlsPanel.Controls.Add(this.writeVariableButton);
+            this.controlsPanel.Controls.Add(this.addOperationOnVariableButton);
             this.controlsPanel.Controls.Add(this.onStartWaitMaskedTextBox);
             this.controlsPanel.Controls.Add(this.onStartWaitCheckBox);
             this.controlsPanel.Controls.Add(this.addTextFromFileButton);
@@ -92,6 +100,34 @@ namespace AdvancedSpamBot
             this.controlsPanel.Name = "controlsPanel";
             this.controlsPanel.Size = new System.Drawing.Size(200, 514);
             this.controlsPanel.TabIndex = 0;
+            // 
+            // writeVariableButton
+            // 
+            this.writeVariableButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.writeVariableButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.writeVariableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.writeVariableButton.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.writeVariableButton.Location = new System.Drawing.Point(5, 270);
+            this.writeVariableButton.Name = "writeVariableButton";
+            this.writeVariableButton.Size = new System.Drawing.Size(189, 25);
+            this.writeVariableButton.TabIndex = 15;
+            this.writeVariableButton.Text = "Write variable";
+            this.writeVariableButton.UseVisualStyleBackColor = false;
+            this.writeVariableButton.Click += new System.EventHandler(this.writeVariableButton_Click);
+            // 
+            // addOperationOnVariableButton
+            // 
+            this.addOperationOnVariableButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.addOperationOnVariableButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.addOperationOnVariableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addOperationOnVariableButton.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.addOperationOnVariableButton.Location = new System.Drawing.Point(5, 239);
+            this.addOperationOnVariableButton.Name = "addOperationOnVariableButton";
+            this.addOperationOnVariableButton.Size = new System.Drawing.Size(189, 25);
+            this.addOperationOnVariableButton.TabIndex = 14;
+            this.addOperationOnVariableButton.Text = "Add operation on variable";
+            this.addOperationOnVariableButton.UseVisualStyleBackColor = false;
+            this.addOperationOnVariableButton.Click += new System.EventHandler(this.addOperationOnVariableButton_Click);
             // 
             // onStartWaitMaskedTextBox
             // 
@@ -285,7 +321,7 @@ namespace AdvancedSpamBot
             this.errorsPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.errorsPanel.Location = new System.Drawing.Point(200, 414);
             this.errorsPanel.Name = "errorsPanel";
-            this.errorsPanel.Size = new System.Drawing.Size(750, 100);
+            this.errorsPanel.Size = new System.Drawing.Size(780, 100);
             this.errorsPanel.TabIndex = 1;
             // 
             // errorsFlowLayoutPanel
@@ -295,7 +331,7 @@ namespace AdvancedSpamBot
             this.errorsFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsFlowLayoutPanel.Location = new System.Drawing.Point(0, 45);
             this.errorsFlowLayoutPanel.Name = "errorsFlowLayoutPanel";
-            this.errorsFlowLayoutPanel.Size = new System.Drawing.Size(750, 55);
+            this.errorsFlowLayoutPanel.Size = new System.Drawing.Size(780, 55);
             this.errorsFlowLayoutPanel.TabIndex = 2;
             // 
             // errorsBotDisplayPanel
@@ -309,7 +345,7 @@ namespace AdvancedSpamBot
             this.errorsBotDisplayPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.errorsBotDisplayPanel.Location = new System.Drawing.Point(0, 25);
             this.errorsBotDisplayPanel.Name = "errorsBotDisplayPanel";
-            this.errorsBotDisplayPanel.Size = new System.Drawing.Size(750, 20);
+            this.errorsBotDisplayPanel.Size = new System.Drawing.Size(780, 20);
             this.errorsBotDisplayPanel.TabIndex = 1;
             // 
             // label4
@@ -374,7 +410,7 @@ namespace AdvancedSpamBot
             this.errorsTopDisplayPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.errorsTopDisplayPanel.Location = new System.Drawing.Point(0, 0);
             this.errorsTopDisplayPanel.Name = "errorsTopDisplayPanel";
-            this.errorsTopDisplayPanel.Size = new System.Drawing.Size(750, 25);
+            this.errorsTopDisplayPanel.Size = new System.Drawing.Size(780, 25);
             this.errorsTopDisplayPanel.TabIndex = 0;
             // 
             // warningsAmountLabel
@@ -429,12 +465,69 @@ namespace AdvancedSpamBot
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.addIntegerVariableButton);
+            this.panel1.Controls.Add(this.importVariablesButton);
+            this.panel1.Controls.Add(this.exportVariablesButton);
+            this.panel1.Controls.Add(this.variablesFlowLayoutPanel);
             this.panel1.Controls.Add(this.historyTextBox);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel1.Location = new System.Drawing.Point(800, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(150, 414);
+            this.panel1.Size = new System.Drawing.Size(180, 414);
             this.panel1.TabIndex = 0;
+            // 
+            // addIntegerVariableButton
+            // 
+            this.addIntegerVariableButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(255)))));
+            this.addIntegerVariableButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(192)))));
+            this.addIntegerVariableButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addIntegerVariableButton.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.addIntegerVariableButton.Location = new System.Drawing.Point(0, 25);
+            this.addIntegerVariableButton.Name = "addIntegerVariableButton";
+            this.addIntegerVariableButton.Size = new System.Drawing.Size(180, 25);
+            this.addIntegerVariableButton.TabIndex = 4;
+            this.addIntegerVariableButton.Text = "Add integer variable";
+            this.addIntegerVariableButton.UseVisualStyleBackColor = false;
+            this.addIntegerVariableButton.Click += new System.EventHandler(this.addIntegerVariableButton_Click);
+            // 
+            // importVariablesButton
+            // 
+            this.importVariablesButton.BackColor = System.Drawing.Color.Silver;
+            this.importVariablesButton.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.importVariablesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.importVariablesButton.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.importVariablesButton.Location = new System.Drawing.Point(0, 0);
+            this.importVariablesButton.Margin = new System.Windows.Forms.Padding(0);
+            this.importVariablesButton.Name = "importVariablesButton";
+            this.importVariablesButton.Size = new System.Drawing.Size(90, 25);
+            this.importVariablesButton.TabIndex = 3;
+            this.importVariablesButton.Text = "Import";
+            this.importVariablesButton.UseVisualStyleBackColor = false;
+            this.importVariablesButton.Click += new System.EventHandler(this.importVariablesButton_Click);
+            // 
+            // exportVariablesButton
+            // 
+            this.exportVariablesButton.BackColor = System.Drawing.Color.Silver;
+            this.exportVariablesButton.FlatAppearance.BorderColor = System.Drawing.Color.Gray;
+            this.exportVariablesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.exportVariablesButton.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.exportVariablesButton.Location = new System.Drawing.Point(90, 0);
+            this.exportVariablesButton.Margin = new System.Windows.Forms.Padding(0);
+            this.exportVariablesButton.Name = "exportVariablesButton";
+            this.exportVariablesButton.Size = new System.Drawing.Size(90, 25);
+            this.exportVariablesButton.TabIndex = 2;
+            this.exportVariablesButton.Text = "Export";
+            this.exportVariablesButton.UseVisualStyleBackColor = false;
+            this.exportVariablesButton.Click += new System.EventHandler(this.exportVariablesButton_Click);
+            // 
+            // variablesFlowLayoutPanel
+            // 
+            this.variablesFlowLayoutPanel.AutoScroll = true;
+            this.variablesFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.variablesFlowLayoutPanel.Location = new System.Drawing.Point(0, 53);
+            this.variablesFlowLayoutPanel.Name = "variablesFlowLayoutPanel";
+            this.variablesFlowLayoutPanel.Size = new System.Drawing.Size(180, 211);
+            this.variablesFlowLayoutPanel.TabIndex = 1;
             // 
             // historyTextBox
             // 
@@ -450,7 +543,7 @@ namespace AdvancedSpamBot
             this.historyTextBox.Name = "historyTextBox";
             this.historyTextBox.ReadOnly = true;
             this.historyTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.historyTextBox.Size = new System.Drawing.Size(150, 150);
+            this.historyTextBox.Size = new System.Drawing.Size(180, 150);
             this.historyTextBox.TabIndex = 0;
             this.historyTextBox.Text = "";
             this.historyTextBox.TextChanged += new System.EventHandler(this.historyTextBox_TextChanged);
@@ -471,7 +564,7 @@ namespace AdvancedSpamBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(950, 514);
+            this.ClientSize = new System.Drawing.Size(980, 514);
             this.Controls.Add(this.botCommandsFlowLayoutPanel);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.errorsPanel);
@@ -526,6 +619,12 @@ namespace AdvancedSpamBot
         private System.Windows.Forms.Button addTextFromFileButton;
         private System.Windows.Forms.MaskedTextBox onStartWaitMaskedTextBox;
         private System.Windows.Forms.CheckBox onStartWaitCheckBox;
+        private System.Windows.Forms.Button addIntegerVariableButton;
+        private System.Windows.Forms.Button importVariablesButton;
+        private System.Windows.Forms.Button exportVariablesButton;
+        public System.Windows.Forms.FlowLayoutPanel variablesFlowLayoutPanel;
+        private System.Windows.Forms.Button writeVariableButton;
+        private System.Windows.Forms.Button addOperationOnVariableButton;
     }
 }
 

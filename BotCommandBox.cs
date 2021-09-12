@@ -21,14 +21,14 @@ namespace AdvancedSpamBot
 
         private CommandBoxType thisType;
 
-        private MainWindow mw;
-
-        public MainWindow mainWindow
+        
+        public string OperationOnVariableData
         {
-            get { return mw; }
-            set { mw = value; }
+            get
+            {
+                return firstVSelectComboBox.Text + "|" + operatorComboBox.Text + "|" + secondVSelectComboBox.Text;
+            }
         }
-
 
         public string TextToWrite
         {
@@ -103,6 +103,12 @@ namespace AdvancedSpamBot
                     }
                 }
             }
+        }
+
+        public string VariableName
+        {
+            get { return variableWriteSelectComboBox.Text; }
+            set { variableWriteSelectComboBox.Text = value; }
         }
 
 
@@ -316,10 +322,10 @@ namespace AdvancedSpamBot
                 switch (thisType)
                 {
                     case CommandBoxType.Text:
-                        this.Size = new Size(580, 100);
+                        //this.Size = new Size(580, 100);
                         textPanel.Visible = true;
-                        upButton.Size = new Size(30, 50);
-                        downButton.Size = new Size(30, 50);
+                        //upButton.Size = new Size(30, 50);
+                        //downButton.Size = new Size(30, 50);
                         break;
                     case CommandBoxType.PressKey:
                         selectKeyComboBox.SelectedIndex = 0;
@@ -338,6 +344,13 @@ namespace AdvancedSpamBot
                         break;
                     case CommandBoxType.TextFromFile:
                         textFromFilePanel.Visible = true;
+                        break;
+                    case CommandBoxType.WriteVariable:
+                        writeVariablePanel.Visible = true;
+                        break;
+                    case CommandBoxType.OperationOnVariable:
+                        operationOnVariablePanel.Visible = true;
+                        operatorComboBox.SelectedIndex = 0;
                         break;
                     default:
                         break;
@@ -403,6 +416,24 @@ namespace AdvancedSpamBot
                     downButton.FlatAppearance.BorderColor = Color.Green;
                     removeButton.FlatAppearance.BorderColor = Color.Green;
                     break;
+                case CommandBoxType.WriteVariable:
+                    upButton.BackColor = Color.FromArgb(255, 128, 255);
+                    downButton.BackColor = Color.FromArgb(255, 128, 255);
+                    removeButton.BackColor = Color.FromArgb(255, 128, 255);
+                    writeVariablePanel.BackColor = Color.FromArgb(255, 128, 255);
+                    upButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
+                    downButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
+                    removeButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
+                    break;
+                case CommandBoxType.OperationOnVariable:
+                    upButton.BackColor = Color.FromArgb(255, 128, 255);
+                    downButton.BackColor = Color.FromArgb(255, 128, 255);
+                    removeButton.BackColor = Color.FromArgb(255, 128, 255);
+                    operationOnVariablePanel.BackColor = Color.FromArgb(255, 128, 255);
+                    upButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
+                    downButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
+                    removeButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
+                    break;
                 default:
                     break;
             }
@@ -410,27 +441,27 @@ namespace AdvancedSpamBot
 
         private void removeButton_Click(object sender, EventArgs e)
         {
-            mw.botCommandsFlowLayoutPanel.Controls.Remove(this);
+            MainWindow.main.botCommandsFlowLayoutPanel.Controls.Remove(this);
             Dispose();
         }
 
         private void upButton_Click(object sender, EventArgs e)
         {
-            int index = mw.botCommandsFlowLayoutPanel.Controls.IndexOf(this);
+            int index = MainWindow.main.botCommandsFlowLayoutPanel.Controls.IndexOf(this);
             if (index - 1 >= 0)
             {
                 List<BotCommandBox> list = new List<BotCommandBox>();
-                foreach (var item in mw.botCommandsFlowLayoutPanel.Controls)
+                foreach (var item in MainWindow.main.botCommandsFlowLayoutPanel.Controls)
                 {
                     list.Add((BotCommandBox)item);
                 }
                 BotCommandBox saved = (BotCommandBox)list[index - 1];
                 list[index - 1] = this;
                 list[index] = saved;
-                mw.botCommandsFlowLayoutPanel.Controls.Clear();
+                MainWindow.main.botCommandsFlowLayoutPanel.Controls.Clear();
                 foreach (var item in list)
                 {
-                    mw.botCommandsFlowLayoutPanel.Controls.Add(item);
+                    MainWindow.main.botCommandsFlowLayoutPanel.Controls.Add(item);
                 }
             }
 
@@ -438,21 +469,21 @@ namespace AdvancedSpamBot
 
         private void downButton_Click(object sender, EventArgs e)
         {
-            int index = mw.botCommandsFlowLayoutPanel.Controls.IndexOf(this);
-            if (index + 1 <= mw.botCommandsFlowLayoutPanel.Controls.Count - 1)
+            int index = MainWindow.main.botCommandsFlowLayoutPanel.Controls.IndexOf(this);
+            if (index + 1 <= MainWindow.main.botCommandsFlowLayoutPanel.Controls.Count - 1)
             {
                 List<BotCommandBox> list = new List<BotCommandBox>();
-                foreach (var item in mw.botCommandsFlowLayoutPanel.Controls)
+                foreach (var item in MainWindow.main.botCommandsFlowLayoutPanel.Controls)
                 {
                     list.Add((BotCommandBox)item);
                 }
                 BotCommandBox saved = (BotCommandBox)list[index + 1];
                 list[index + 1] = this;
                 list[index] = saved;
-                mw.botCommandsFlowLayoutPanel.Controls.Clear();
+                MainWindow.main.botCommandsFlowLayoutPanel.Controls.Clear();
                 foreach (var item in list)
                 {
-                    mw.botCommandsFlowLayoutPanel.Controls.Add(item);
+                    MainWindow.main.botCommandsFlowLayoutPanel.Controls.Add(item);
                 }
             }
         }
@@ -478,6 +509,24 @@ namespace AdvancedSpamBot
                 MessageBox.Show("Unable to open file\n" + exc.ToString());
             }
         }
+
+        private void variableWriteSelectComboBox_Enter(object sender, EventArgs e)
+        {
+            variableWriteSelectComboBox.Items.Clear();
+            variableWriteSelectComboBox.Items.AddRange(VariableBox.VariablesDictionary.Select(x => x.Key).ToArray());
+        }
+
+        private void firstVSelectComboBox_Enter(object sender, EventArgs e)
+        {
+            firstVSelectComboBox.Items.Clear();
+            firstVSelectComboBox.Items.AddRange(VariableBox.VariablesDictionary.Select(x => x.Key).ToArray());
+        }
+
+        private void secondVSelectComboBox_Enter(object sender, EventArgs e)
+        {
+            secondVSelectComboBox.Items.Clear();
+            secondVSelectComboBox.Items.AddRange(VariableBox.VariablesDictionary.Select(x => x.Key).ToArray());
+        }
     }
 
     public enum CommandBoxType
@@ -487,6 +536,8 @@ namespace AdvancedSpamBot
         Wait,
         WaitRandom,
         CtrlAltShift,
-        TextFromFile
+        TextFromFile,
+        OperationOnVariable,
+        WriteVariable
     }
 }

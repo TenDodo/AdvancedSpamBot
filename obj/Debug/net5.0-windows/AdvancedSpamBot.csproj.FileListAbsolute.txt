@@ -19,3 +19,4 @@ C:\Users\1arka\source\repos\AdvancedSpamBot\AdvancedSpamBot\obj\Debug\net5.0-win
 C:\Users\1arka\source\repos\AdvancedSpamBot\AdvancedSpamBot\obj\Debug\net5.0-windows\AdvancedSpamBot.genruntimeconfig.cache
 C:\Users\1arka\source\repos\AdvancedSpamBot\AdvancedSpamBot\obj\Debug\net5.0-windows\AdvancedSpamBot.ErrorBox.resources
 C:\Users\1arka\source\repos\AdvancedSpamBot\AdvancedSpamBot\obj\Debug\net5.0-windows\AdvancedSpamBot.Properties.Resources.resources
+C:\Users\1arka\source\repos\AdvancedSpamBot\AdvancedSpamBot\obj\Debug\net5.0-windows\AdvancedSpamBot.VariableBox.resources

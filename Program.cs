@@ -17,7 +17,9 @@ namespace AdvancedSpamBot
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            MainWindow mw = new MainWindow();
+            MainWindow.main = mw;
+            Application.Run(mw);
         }
     }
 }

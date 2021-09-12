@@ -35,6 +35,9 @@ namespace AdvancedSpamBot
             this.upButton = new System.Windows.Forms.Button();
             this.textPanel = new System.Windows.Forms.Panel();
             this.richTextBox = new System.Windows.Forms.RichTextBox();
+            this.writeVariablePanel = new System.Windows.Forms.Panel();
+            this.variableWriteSelectComboBox = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.textFromFilePanel = new System.Windows.Forms.Panel();
             this.changeFileButton = new System.Windows.Forms.Button();
             this.previewLabel = new System.Windows.Forms.Label();
@@ -54,13 +57,19 @@ namespace AdvancedSpamBot
             this.ctrlAltShiftPanel = new System.Windows.Forms.Panel();
             this.ctrlAltShiftComboBox = new System.Windows.Forms.ComboBox();
             this.downUpComboBox = new System.Windows.Forms.ComboBox();
+            this.operationOnVariablePanel = new System.Windows.Forms.Panel();
+            this.secondVSelectComboBox = new System.Windows.Forms.ComboBox();
+            this.operatorComboBox = new System.Windows.Forms.ComboBox();
+            this.firstVSelectComboBox = new System.Windows.Forms.ComboBox();
             this.controlsPanel.SuspendLayout();
             this.textPanel.SuspendLayout();
+            this.writeVariablePanel.SuspendLayout();
             this.textFromFilePanel.SuspendLayout();
             this.waitRandomPanel.SuspendLayout();
             this.pressKeyPanel.SuspendLayout();
             this.waitPanel.SuspendLayout();
             this.ctrlAltShiftPanel.SuspendLayout();
+            this.operationOnVariablePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // removeButton
@@ -146,6 +155,37 @@ namespace AdvancedSpamBot
             this.richTextBox.Size = new System.Drawing.Size(520, 50);
             this.richTextBox.TabIndex = 0;
             this.richTextBox.Text = "";
+            // 
+            // writeVariablePanel
+            // 
+            this.writeVariablePanel.Controls.Add(this.variableWriteSelectComboBox);
+            this.writeVariablePanel.Controls.Add(this.label5);
+            this.writeVariablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.writeVariablePanel.Location = new System.Drawing.Point(30, 0);
+            this.writeVariablePanel.Name = "writeVariablePanel";
+            this.writeVariablePanel.Size = new System.Drawing.Size(520, 50);
+            this.writeVariablePanel.TabIndex = 8;
+            this.writeVariablePanel.Visible = false;
+            // 
+            // variableWriteSelectComboBox
+            // 
+            this.variableWriteSelectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.variableWriteSelectComboBox.FormattingEnabled = true;
+            this.variableWriteSelectComboBox.Location = new System.Drawing.Point(115, 15);
+            this.variableWriteSelectComboBox.Name = "variableWriteSelectComboBox";
+            this.variableWriteSelectComboBox.Size = new System.Drawing.Size(100, 23);
+            this.variableWriteSelectComboBox.TabIndex = 3;
+            this.variableWriteSelectComboBox.Enter += new System.EventHandler(this.variableWriteSelectComboBox_Enter);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label5.Location = new System.Drawing.Point(15, 17);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 17);
+            this.label5.TabIndex = 2;
+            this.label5.Text = "Write variable";
             // 
             // textFromFilePanel
             // 
@@ -400,6 +440,53 @@ namespace AdvancedSpamBot
             this.downUpComboBox.Size = new System.Drawing.Size(121, 23);
             this.downUpComboBox.TabIndex = 0;
             // 
+            // operationOnVariablePanel
+            // 
+            this.operationOnVariablePanel.Controls.Add(this.secondVSelectComboBox);
+            this.operationOnVariablePanel.Controls.Add(this.operatorComboBox);
+            this.operationOnVariablePanel.Controls.Add(this.firstVSelectComboBox);
+            this.operationOnVariablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.operationOnVariablePanel.Location = new System.Drawing.Point(30, 0);
+            this.operationOnVariablePanel.Name = "operationOnVariablePanel";
+            this.operationOnVariablePanel.Size = new System.Drawing.Size(520, 50);
+            this.operationOnVariablePanel.TabIndex = 9;
+            this.operationOnVariablePanel.Visible = false;
+            // 
+            // secondVSelectComboBox
+            // 
+            this.secondVSelectComboBox.FormattingEnabled = true;
+            this.secondVSelectComboBox.Location = new System.Drawing.Point(326, 15);
+            this.secondVSelectComboBox.Name = "secondVSelectComboBox";
+            this.secondVSelectComboBox.Size = new System.Drawing.Size(100, 23);
+            this.secondVSelectComboBox.TabIndex = 6;
+            this.secondVSelectComboBox.Enter += new System.EventHandler(this.secondVSelectComboBox_Enter);
+            // 
+            // operatorComboBox
+            // 
+            this.operatorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.operatorComboBox.FormattingEnabled = true;
+            this.operatorComboBox.Items.AddRange(new object[] {
+            "=",
+            "+=",
+            "-=",
+            "/=",
+            "*=",
+            "%="});
+            this.operatorComboBox.Location = new System.Drawing.Point(121, 15);
+            this.operatorComboBox.Name = "operatorComboBox";
+            this.operatorComboBox.Size = new System.Drawing.Size(199, 23);
+            this.operatorComboBox.TabIndex = 5;
+            // 
+            // firstVSelectComboBox
+            // 
+            this.firstVSelectComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.firstVSelectComboBox.FormattingEnabled = true;
+            this.firstVSelectComboBox.Location = new System.Drawing.Point(15, 15);
+            this.firstVSelectComboBox.Name = "firstVSelectComboBox";
+            this.firstVSelectComboBox.Size = new System.Drawing.Size(100, 23);
+            this.firstVSelectComboBox.TabIndex = 4;
+            this.firstVSelectComboBox.Enter += new System.EventHandler(this.firstVSelectComboBox_Enter);
+            // 
             // BotCommandBox
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -410,6 +497,8 @@ namespace AdvancedSpamBot
             this.Controls.Add(this.ctrlAltShiftPanel);
             this.Controls.Add(this.textFromFilePanel);
             this.Controls.Add(this.pressKeyPanel);
+            this.Controls.Add(this.writeVariablePanel);
+            this.Controls.Add(this.operationOnVariablePanel);
             this.Controls.Add(this.controlsPanel);
             this.Controls.Add(this.removeButton);
             this.Margin = new System.Windows.Forms.Padding(0, 2, 0, 2);
@@ -417,6 +506,8 @@ namespace AdvancedSpamBot
             this.Size = new System.Drawing.Size(580, 50);
             this.controlsPanel.ResumeLayout(false);
             this.textPanel.ResumeLayout(false);
+            this.writeVariablePanel.ResumeLayout(false);
+            this.writeVariablePanel.PerformLayout();
             this.textFromFilePanel.ResumeLayout(false);
             this.textFromFilePanel.PerformLayout();
             this.waitRandomPanel.ResumeLayout(false);
@@ -426,6 +517,7 @@ namespace AdvancedSpamBot
             this.waitPanel.ResumeLayout(false);
             this.waitPanel.PerformLayout();
             this.ctrlAltShiftPanel.ResumeLayout(false);
+            this.operationOnVariablePanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -457,5 +549,12 @@ namespace AdvancedSpamBot
         private System.Windows.Forms.Label pathLabel;
         private System.Windows.Forms.Label previewLabel;
         private System.Windows.Forms.Button changeFileButton;
+        private System.Windows.Forms.Panel writeVariablePanel;
+        private System.Windows.Forms.ComboBox variableWriteSelectComboBox;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel operationOnVariablePanel;
+        private System.Windows.Forms.ComboBox firstVSelectComboBox;
+        private System.Windows.Forms.ComboBox secondVSelectComboBox;
+        private System.Windows.Forms.ComboBox operatorComboBox;
     }
 }
