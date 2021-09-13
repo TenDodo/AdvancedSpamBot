@@ -53,6 +53,8 @@ namespace AdvancedSpamBot
             botCommandsFlowLayoutPanel.Controls.Add(box);
         }
 
+        
+
         private void addTextFromFileButton_Click(object sender, EventArgs e)
         {
             try
@@ -765,6 +767,12 @@ namespace AdvancedSpamBot
                     case CommandBoxType.TextFromFile:
                         _data.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.TextFromFile, a.FileContent));
                         break;
+                    case CommandBoxType.WriteVariable:
+                        _data.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.WriteVariable, a.VariableName));
+                        break;
+                    case CommandBoxType.OperationOnVariable:
+                        _data.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.OperationOnVariable, a.OperationOnVariableData));
+                        break;
                     default:
                         break;
                 }
@@ -804,6 +812,7 @@ namespace AdvancedSpamBot
                         foreach (var item in importedData)
                         {
                             commandsList[i] = new BotCommandBox(item.Key);
+                            botCommandsFlowLayoutPanel.Controls.Add(commandsList[i]);
                             switch (item.Key)
                             {
                                 case CommandBoxType.Text:
@@ -824,10 +833,16 @@ namespace AdvancedSpamBot
                                 case CommandBoxType.TextFromFile:
                                     commandsList[i].FileContent = item.Value;
                                     break;
+                                case CommandBoxType.WriteVariable:
+                                    commandsList[i].VariableName = item.Value;
+                                    break;
+                                case CommandBoxType.OperationOnVariable:
+                                    commandsList[i].OperationOnVariableData = item.Value;
+                                    break;
                                 default:
                                     break;
                             }
-                            botCommandsFlowLayoutPanel.Controls.Add(commandsList[i]);
+                            
                             i++;
                         }
                     }
@@ -977,5 +992,7 @@ namespace AdvancedSpamBot
                 MessageBox.Show("Invalid file");
             }
         }
+
+        
     }
 }

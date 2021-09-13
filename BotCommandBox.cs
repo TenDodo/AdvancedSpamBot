@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,13 @@ namespace AdvancedSpamBot
             get
             {
                 return firstVSelectComboBox.Text + "|" + operatorComboBox.Text + "|" + secondVSelectComboBox.Text;
+            }
+            set
+            {
+                string[] s = value.Split('|');
+                firstVSelectComboBox.Text = s[0];
+                operatorComboBox.Text = s[1];
+                secondVSelectComboBox.Text = s[2];
             }
         }
 
@@ -105,10 +113,18 @@ namespace AdvancedSpamBot
             }
         }
 
+        
+
         public string VariableName
         {
             get { return variableWriteSelectComboBox.Text; }
-            set { variableWriteSelectComboBox.Text = value; }
+            set {
+                //if (variableWriteSelectComboBox.Items.Contains(value))
+                //{
+                //    variableWriteSelectComboBox.SelectedIndex = variableWriteSelectComboBox.Items.IndexOf(value);
+                //}
+                variableWriteSelectComboBox.Text = value;
+            }
         }
 
 
@@ -347,11 +363,15 @@ namespace AdvancedSpamBot
                         break;
                     case CommandBoxType.WriteVariable:
                         writeVariablePanel.Visible = true;
+                        variableWriteSelectComboBox.Items.Clear();
+                        variableWriteSelectComboBox.Items.AddRange(VariableBox.VariablesDictionary.Select(x => x.Key).ToArray());
                         break;
                     case CommandBoxType.OperationOnVariable:
                         operationOnVariablePanel.Visible = true;
+                        firstVSelectComboBox.Items.Clear();
+                        firstVSelectComboBox.Items.AddRange(VariableBox.VariablesDictionary.Select(x => x.Key).ToArray());
                         operatorComboBox.SelectedIndex = 0;
-                        break;
+                        break;                    
                     default:
                         break;
                 }
@@ -433,7 +453,7 @@ namespace AdvancedSpamBot
                     upButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
                     downButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
                     removeButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
-                    break;
+                    break;                
                 default:
                     break;
             }
