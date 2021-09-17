@@ -32,6 +32,7 @@ namespace AdvancedSpamBot
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.controlsPanel = new System.Windows.Forms.Panel();
+            this.previewWindowCheckBox = new System.Windows.Forms.CheckBox();
             this.writeVariableButton = new System.Windows.Forms.Button();
             this.addOperationOnVariableButton = new System.Windows.Forms.Button();
             this.onStartWaitMaskedTextBox = new System.Windows.Forms.MaskedTextBox();
@@ -79,6 +80,7 @@ namespace AdvancedSpamBot
             // controlsPanel
             // 
             this.controlsPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.controlsPanel.Controls.Add(this.previewWindowCheckBox);
             this.controlsPanel.Controls.Add(this.writeVariableButton);
             this.controlsPanel.Controls.Add(this.addOperationOnVariableButton);
             this.controlsPanel.Controls.Add(this.onStartWaitMaskedTextBox);
@@ -100,6 +102,16 @@ namespace AdvancedSpamBot
             this.controlsPanel.Name = "controlsPanel";
             this.controlsPanel.Size = new System.Drawing.Size(200, 514);
             this.controlsPanel.TabIndex = 0;
+            // 
+            // previewWindowCheckBox
+            // 
+            this.previewWindowCheckBox.AutoSize = true;
+            this.previewWindowCheckBox.Location = new System.Drawing.Point(5, 380);
+            this.previewWindowCheckBox.Name = "previewWindowCheckBox";
+            this.previewWindowCheckBox.Size = new System.Drawing.Size(175, 19);
+            this.previewWindowCheckBox.TabIndex = 16;
+            this.previewWindowCheckBox.Text = "Show small preview window";
+            this.previewWindowCheckBox.UseVisualStyleBackColor = true;
             // 
             // writeVariableButton
             // 
@@ -625,6 +637,7 @@ namespace AdvancedSpamBot
         public System.Windows.Forms.FlowLayoutPanel variablesFlowLayoutPanel;
         private System.Windows.Forms.Button writeVariableButton;
         private System.Windows.Forms.Button addOperationOnVariableButton;
+        private System.Windows.Forms.CheckBox previewWindowCheckBox;
     }
 }
 

@@ -20,9 +20,13 @@ namespace AdvancedSpamBot
         public MainWindow()
         {
             InitializeComponent();
+            preview = new PreviewWindow();
+            preview.TopMost = true;
         }
 
         public static MainWindow main;
+
+        public static PreviewWindow preview;
         private void addTextButton_Click(object sender, EventArgs e)
         {
             BotCommandBox box = new BotCommandBox(CommandBoxType.Text);
@@ -148,6 +152,7 @@ namespace AdvancedSpamBot
                 loopsAmountMaskedTextBox.Enabled = false;
                 onStartWaitCheckBox.Enabled = false;
                 onStartWaitMaskedTextBox.Enabled = false;
+                previewWindowCheckBox.Enabled = false;
                 foreach (VariableBox item in variablesFlowLayoutPanel.Controls)
                 {
                     item.Enabled = false;
@@ -210,6 +215,11 @@ namespace AdvancedSpamBot
                 ReportState = commands.Count.ToString() + " command blocks";
                 startButton.Text = "Stop";
                 vd = new Dictionary<string, int>(VariableBox.VariablesDictionary);
+                if (previewWindowCheckBox.Checked)
+                {
+                    this.Hide();
+                    preview.Show();
+                }
                 botBackgroundWorker.RunWorkerAsync();
             }
             else
@@ -468,7 +478,9 @@ namespace AdvancedSpamBot
         private void botBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             IsRunning = false;
+
             startButton.Text = "Start";
+            System.Media.SystemSounds.Hand.Play();
             ReportState = "Operations finished";
             ctrl = false;
             alt = false;
@@ -490,6 +502,9 @@ namespace AdvancedSpamBot
             loopsAmountCheckBox.Enabled = true;
             loopsAmountMaskedTextBox.Enabled = loopsAmountCheckBox.Checked;
             onStartWaitCheckBox.Enabled = true;
+            previewWindowCheckBox.Enabled = true;
+            this.Show();
+            preview.Hide();
             onStartWaitMaskedTextBox.Enabled = onStartWaitCheckBox.Checked;
         }
 
@@ -507,6 +522,9 @@ namespace AdvancedSpamBot
         {
             historyTextBox.SelectionStart = historyTextBox.Text.Length;
             historyTextBox.ScrollToCaret();
+            preview.historyTextBox.Text = historyTextBox.Text;
+            preview.historyTextBox.SelectionStart = preview.historyTextBox.Text.Length;
+            preview.historyTextBox.ScrollToCaret();
         }
 
         private void loopsAmountCheckBox_CheckedChanged(object sender, EventArgs e)
