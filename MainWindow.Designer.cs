@@ -70,6 +70,7 @@ namespace AdvancedSpamBot
             this.historyTextBox = new System.Windows.Forms.RichTextBox();
             this.errorsBackgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.errorsSearchTimer = new System.Windows.Forms.Timer(this.components);
+            this.addExtraFeaturesButton = new System.Windows.Forms.Button();
             this.controlsPanel.SuspendLayout();
             this.errorsPanel.SuspendLayout();
             this.errorsBotDisplayPanel.SuspendLayout();
@@ -80,6 +81,7 @@ namespace AdvancedSpamBot
             // controlsPanel
             // 
             this.controlsPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.controlsPanel.Controls.Add(this.addExtraFeaturesButton);
             this.controlsPanel.Controls.Add(this.previewWindowCheckBox);
             this.controlsPanel.Controls.Add(this.writeVariableButton);
             this.controlsPanel.Controls.Add(this.addOperationOnVariableButton);
@@ -572,6 +574,20 @@ namespace AdvancedSpamBot
             this.errorsSearchTimer.Interval = 300;
             this.errorsSearchTimer.Tick += new System.EventHandler(this.errorsSearchTimer_Tick);
             // 
+            // addExtraFeaturesButton
+            // 
+            this.addExtraFeaturesButton.BackColor = System.Drawing.Color.Chocolate;
+            this.addExtraFeaturesButton.FlatAppearance.BorderColor = System.Drawing.Color.SaddleBrown;
+            this.addExtraFeaturesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addExtraFeaturesButton.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.addExtraFeaturesButton.Location = new System.Drawing.Point(5, 301);
+            this.addExtraFeaturesButton.Name = "addExtraFeaturesButton";
+            this.addExtraFeaturesButton.Size = new System.Drawing.Size(189, 25);
+            this.addExtraFeaturesButton.TabIndex = 17;
+            this.addExtraFeaturesButton.Text = "Add extra feature block";
+            this.addExtraFeaturesButton.UseVisualStyleBackColor = false;
+            this.addExtraFeaturesButton.Click += new System.EventHandler(this.addExtraFeaturesButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -638,6 +654,7 @@ namespace AdvancedSpamBot
         private System.Windows.Forms.Button writeVariableButton;
         private System.Windows.Forms.Button addOperationOnVariableButton;
         private System.Windows.Forms.CheckBox previewWindowCheckBox;
+        private System.Windows.Forms.Button addExtraFeaturesButton;
     }
 }
 

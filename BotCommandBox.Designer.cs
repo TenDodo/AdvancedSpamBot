@@ -61,6 +61,9 @@ namespace AdvancedSpamBot
             this.secondVSelectComboBox = new System.Windows.Forms.ComboBox();
             this.operatorComboBox = new System.Windows.Forms.ComboBox();
             this.firstVSelectComboBox = new System.Windows.Forms.ComboBox();
+            this.extraFeaturePanel = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
+            this.extraFeatureComboBox = new System.Windows.Forms.ComboBox();
             this.controlsPanel.SuspendLayout();
             this.textPanel.SuspendLayout();
             this.writeVariablePanel.SuspendLayout();
@@ -70,6 +73,7 @@ namespace AdvancedSpamBot
             this.waitPanel.SuspendLayout();
             this.ctrlAltShiftPanel.SuspendLayout();
             this.operationOnVariablePanel.SuspendLayout();
+            this.extraFeaturePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // removeButton
@@ -487,6 +491,42 @@ namespace AdvancedSpamBot
             this.firstVSelectComboBox.TabIndex = 4;
             this.firstVSelectComboBox.Enter += new System.EventHandler(this.firstVSelectComboBox_Enter);
             // 
+            // extraFeaturePanel
+            // 
+            this.extraFeaturePanel.Controls.Add(this.extraFeatureComboBox);
+            this.extraFeaturePanel.Controls.Add(this.label6);
+            this.extraFeaturePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extraFeaturePanel.Location = new System.Drawing.Point(0, 0);
+            this.extraFeaturePanel.Name = "extraFeaturePanel";
+            this.extraFeaturePanel.Size = new System.Drawing.Size(520, 50);
+            this.extraFeaturePanel.TabIndex = 10;
+            this.extraFeaturePanel.Visible = false;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Century Gothic", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label6.Location = new System.Drawing.Point(15, 17);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(41, 17);
+            this.label6.TabIndex = 3;
+            this.label6.Text = "Write";
+            // 
+            // extraFeatureComboBox
+            // 
+            this.extraFeatureComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.extraFeatureComboBox.FormattingEnabled = true;
+            this.extraFeatureComboBox.Items.AddRange(new object[] {
+            "Date",
+            "Time",
+            "Current user name",
+            "Computer uptime"});
+            this.extraFeatureComboBox.Location = new System.Drawing.Point(62, 15);
+            this.extraFeatureComboBox.Name = "extraFeatureComboBox";
+            this.extraFeatureComboBox.Size = new System.Drawing.Size(339, 23);
+            this.extraFeatureComboBox.TabIndex = 4;
+            this.extraFeatureComboBox.Enter += new System.EventHandler(this.extraFeatureComboBox_Enter);
+            // 
             // BotCommandBox
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -498,6 +538,7 @@ namespace AdvancedSpamBot
             this.Controls.Add(this.textFromFilePanel);
             this.Controls.Add(this.pressKeyPanel);
             this.Controls.Add(this.writeVariablePanel);
+            this.Controls.Add(this.extraFeaturePanel);
             this.Controls.Add(this.operationOnVariablePanel);
             this.Controls.Add(this.controlsPanel);
             this.Controls.Add(this.removeButton);
@@ -518,6 +559,8 @@ namespace AdvancedSpamBot
             this.waitPanel.PerformLayout();
             this.ctrlAltShiftPanel.ResumeLayout(false);
             this.operationOnVariablePanel.ResumeLayout(false);
+            this.extraFeaturePanel.ResumeLayout(false);
+            this.extraFeaturePanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -556,5 +599,8 @@ namespace AdvancedSpamBot
         private System.Windows.Forms.ComboBox firstVSelectComboBox;
         private System.Windows.Forms.ComboBox secondVSelectComboBox;
         private System.Windows.Forms.ComboBox operatorComboBox;
+        private System.Windows.Forms.Panel extraFeaturePanel;
+        private System.Windows.Forms.ComboBox extraFeatureComboBox;
+        private System.Windows.Forms.Label label6;
     }
 }

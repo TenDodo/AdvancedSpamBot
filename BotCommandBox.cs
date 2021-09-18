@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,7 +23,7 @@ namespace AdvancedSpamBot
 
         private CommandBoxType thisType;
 
-        
+
         public string OperationOnVariableData
         {
             get
@@ -56,7 +57,7 @@ namespace AdvancedSpamBot
                 }
                 else
                 {
-                    
+
                     return minTimeMaskedTextBox.Text.Replace(" ", "") + "|" + maxTimeMaskedTextBox.Text.Replace(" ", "");
                 }
             }
@@ -79,7 +80,8 @@ namespace AdvancedSpamBot
 
         public string FilePath
         {
-            set { 
+            set
+            {
                 pathLabel.Text = "File path: " + value;
                 int i = 0;
                 while (pathLabel.Width > 420)
@@ -94,7 +96,8 @@ namespace AdvancedSpamBot
         public string FileContent
         {
             get { return _fileContent; }
-            set { 
+            set
+            {
                 _fileContent = value;
                 previewLabel.Text = "Preview: " + value;
                 if (previewLabel.Width > 517 || previewLabel.Height > 17)
@@ -113,17 +116,34 @@ namespace AdvancedSpamBot
             }
         }
 
-        
+
 
         public string VariableName
         {
             get { return variableWriteSelectComboBox.Text; }
-            set {
+            set
+            {
                 //if (variableWriteSelectComboBox.Items.Contains(value))
                 //{
                 //    variableWriteSelectComboBox.SelectedIndex = variableWriteSelectComboBox.Items.IndexOf(value);
                 //}
                 variableWriteSelectComboBox.Text = value;
+            }
+        }
+
+        public string ExtraFeatureData
+        {
+            get
+            {
+                return extraFeatureComboBox.Text;
+            }
+            set
+            {
+                extraFeatureComboBox.Text = value;
+                if (extraFeatureComboBox.Text == "")
+                {
+                    extraFeatureComboBox.SelectedIndex = 0;
+                }
             }
         }
 
@@ -333,7 +353,8 @@ namespace AdvancedSpamBot
         public CommandBoxType ThisType
         {
             get { return thisType; }
-            set { 
+            set
+            {
                 thisType = value;
                 switch (thisType)
                 {
@@ -371,7 +392,39 @@ namespace AdvancedSpamBot
                         firstVSelectComboBox.Items.Clear();
                         firstVSelectComboBox.Items.AddRange(VariableBox.VariablesDictionary.Select(x => x.Key).ToArray());
                         operatorComboBox.SelectedIndex = 0;
-                        break;                    
+                        break;
+                    case CommandBoxType.ExtraFeature:
+                        extraFeaturePanel.Visible = true;
+                        
+                        extraFeatureComboBox.Items.Clear();
+                        extraFeatureComboBox.Items.AddRange(new object[] {
+            "Date",
+            "Time",
+            "Current user name",
+            "Computer uptime"});
+                        String strHostName = string.Empty;
+                        strHostName = Dns.GetHostName();
+                        if (strHostName != "")
+                        {
+                            extraFeatureComboBox.Items.Add("Local machine's host name");
+                            IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+                            int i = 0;
+                            foreach (var item in ipEntry.AddressList)
+                            {
+                                if (item.ToString().Contains(':'))
+                                {
+                                    extraFeatureComboBox.Items.Add("Local IP address (" + i + ") (IPv6)");
+                                }
+                                else
+                                {
+                                    extraFeatureComboBox.Items.Add("Local IP address (" + i + ") (IPv4)");
+                                }
+                                
+                                i++;
+                            }
+                        }
+                        extraFeatureComboBox.SelectedIndex = 0;
+                        break;
                     default:
                         break;
                 }
@@ -453,7 +506,16 @@ namespace AdvancedSpamBot
                     upButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
                     downButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
                     removeButton.FlatAppearance.BorderColor = Color.FromArgb(192, 0, 192);
-                    break;                
+                    break;
+                case CommandBoxType.ExtraFeature:
+                    upButton.BackColor = Color.Chocolate;
+                    downButton.BackColor = Color.Chocolate;
+                    removeButton.BackColor = Color.Chocolate;
+                    extraFeaturePanel.BackColor = Color.Chocolate;
+                    upButton.FlatAppearance.BorderColor = Color.SaddleBrown;
+                    downButton.FlatAppearance.BorderColor = Color.SaddleBrown;
+                    removeButton.FlatAppearance.BorderColor = Color.SaddleBrown;
+                    break;
                 default:
                     break;
             }
@@ -547,6 +609,37 @@ namespace AdvancedSpamBot
             secondVSelectComboBox.Items.Clear();
             secondVSelectComboBox.Items.AddRange(VariableBox.VariablesDictionary.Select(x => x.Key).ToArray());
         }
+
+        private void extraFeatureComboBox_Enter(object sender, EventArgs e)
+        {
+            extraFeatureComboBox.Items.Clear();
+            extraFeatureComboBox.Items.AddRange(new object[] {
+            "Date",
+            "Time",
+            "Current user name",
+            "Computer uptime"});
+            String strHostName = string.Empty;
+            strHostName = Dns.GetHostName();
+            if (strHostName != "")
+            {
+                extraFeatureComboBox.Items.Add("Local machine's host name");
+                IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+                int i = 0;
+                foreach (var item in ipEntry.AddressList)
+                {
+                    if (item.ToString().Contains(':'))
+                    {
+                        extraFeatureComboBox.Items.Add("Local IP address (" + i + ") (IPv6)");
+                    }
+                    else
+                    {
+                        extraFeatureComboBox.Items.Add("Local IP address (" + i + ") (IPv4)");
+                    }
+
+                    i++;
+                }
+            }
+        }
     }
 
     public enum CommandBoxType
@@ -558,6 +651,7 @@ namespace AdvancedSpamBot
         CtrlAltShift,
         TextFromFile,
         OperationOnVariable,
-        WriteVariable
+        WriteVariable,
+        ExtraFeature
     }
 }

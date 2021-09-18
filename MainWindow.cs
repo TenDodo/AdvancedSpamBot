@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
+using System.Net;
 
 namespace AdvancedSpamBot
 {
@@ -57,7 +59,11 @@ namespace AdvancedSpamBot
             botCommandsFlowLayoutPanel.Controls.Add(box);
         }
 
-        
+        private void addExtraFeaturesButton_Click(object sender, EventArgs e)
+        {
+            BotCommandBox box = new BotCommandBox(CommandBoxType.ExtraFeature);
+            botCommandsFlowLayoutPanel.Controls.Add(box);
+        }
 
         private void addTextFromFileButton_Click(object sender, EventArgs e)
         {
@@ -139,7 +145,7 @@ namespace AdvancedSpamBot
 
 
                 }
-                
+
                 botCommandsFlowLayoutPanel.Enabled = false;
                 importButton.Enabled = false;
                 exportButton.Enabled = false;
@@ -207,6 +213,9 @@ namespace AdvancedSpamBot
                             break;
                         case CommandBoxType.OperationOnVariable:
                             commands.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.OperationOnVariable, a.OperationOnVariableData));
+                            break;
+                        case CommandBoxType.ExtraFeature:
+                            commands.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.ExtraFeature, a.ExtraFeatureData));
                             break;
                         default:
                             break;
@@ -290,6 +299,9 @@ namespace AdvancedSpamBot
         bool shift = false;
 
         Dictionary<string, int> vd;
+
+        [DllImport("kernel32")]
+        extern static UInt64 GetTickCount64();
 
         private void botBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -425,7 +437,7 @@ namespace AdvancedSpamBot
                         ReportState = operations[0] + " " + operations[1] + " " + operations[2];
                         switch (operations[1])
                         {
-                            case "=":                                
+                            case "=":
                                 vd[operations[0]] = vd.ContainsKey(operations[2]) ? vd[operations[2]] : int.Parse(operations[2]);
                                 break;
                             case "+=":
@@ -439,14 +451,51 @@ namespace AdvancedSpamBot
                                 break;
                             case "%=":
                                 vd[operations[0]] %= vd.ContainsKey(operations[2]) ? vd[operations[2]] : int.Parse(operations[2]);
-                                break;    
+                                break;
                             case "*=":
                                 vd[operations[0]] *= vd.ContainsKey(operations[2]) ? vd[operations[2]] : int.Parse(operations[2]);
-                                break;                                                     
+                                break;
                             default:
                                 break;
                         }
-                        
+
+                    }
+                    else if (item.Key == CommandBoxType.ExtraFeature && IsRunning)
+                    {
+                        switch (item.Value)
+                        {
+                            case "Date":
+                                ReportState = "Writing date";
+                                SendKeys.SendWait(fixText(DateTime.Now.Date.ToShortDateString()));
+                                break;
+                            case "Time":
+                                ReportState = "Writing time";
+                                SendKeys.SendWait(fixText(DateTime.Now.Hour.ToString().PadLeft(2, '0') + ":" + DateTime.Now.Minute.ToString().PadLeft(2, '0') + ":" + DateTime.Now.Second.ToString().PadLeft(2, '0')));
+                                break;
+                            case "Current user name":
+                                ReportState = "Writing urrent user name";
+                                SendKeys.SendWait(fixText(Environment.UserName));
+                                break;
+                            case "Computer uptime":
+                                ReportState = "Writing computer uptime";
+                                var timespan = TimeSpan.FromMilliseconds(GetTickCount64());
+                                SendKeys.SendWait(fixText(timespan.ToString()));
+                                break;
+                            case "Local machine's host name":
+                                ReportState = "Writing local machine's host name";
+                                SendKeys.SendWait(fixText(Dns.GetHostName()));
+                                break;
+                            default:
+                                ReportState = "Writing IP address";
+                                int a = int.Parse(new string(item.Value.Replace("IPv6", "").Replace("IPv4", "").Where(char.IsDigit).ToArray()));
+                                Debug.WriteLine(a);
+                                String strHostName = Dns.GetHostName();
+                                IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
+                                Debug.WriteLine("Length " + ipEntry.AddressList.Length);
+                                SendKeys.SendWait(fixText(ipEntry.AddressList[a].ToString()));
+                                break;
+                        }
+
                     }
                     else
                     {
@@ -569,6 +618,9 @@ namespace AdvancedSpamBot
                     case CommandBoxType.OperationOnVariable:
                         errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.OperationOnVariable, a.OperationOnVariableData));
                         break;
+                    case CommandBoxType.ExtraFeature:
+                        errorsSearchingList.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.ExtraFeature, a.ExtraFeatureData));
+                        break;
                     default:
                         break;
                 }
@@ -658,6 +710,13 @@ namespace AdvancedSpamBot
                         if (!VariableBox.VariablesDictionary.ContainsKey(item.Value))
                         {
                             newErrorsList.Add(new ErrorData(0, "Variable " + item.Value + " does not exist", i));
+                            errorsCount++;
+                        }
+                        break;
+                    case CommandBoxType.ExtraFeature:
+                        if (item.Value == "")
+                        {
+                            newErrorsList.Add(new ErrorData(0, "Extra feature combo box cannot be empty", i));
                             errorsCount++;
                         }
                         break;
@@ -791,6 +850,9 @@ namespace AdvancedSpamBot
                     case CommandBoxType.OperationOnVariable:
                         _data.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.OperationOnVariable, a.OperationOnVariableData));
                         break;
+                    case CommandBoxType.ExtraFeature:
+                        _data.Add(new KeyValuePair<CommandBoxType, string>(CommandBoxType.ExtraFeature, a.ExtraFeatureData));
+                        break;
                     default:
                         break;
                 }
@@ -857,10 +919,13 @@ namespace AdvancedSpamBot
                                 case CommandBoxType.OperationOnVariable:
                                     commandsList[i].OperationOnVariableData = item.Value;
                                     break;
+                                case CommandBoxType.ExtraFeature:
+                                    commandsList[i].ExtraFeatureData = item.Value;
+                                    break;
                                 default:
                                     break;
                             }
-                            
+
                             i++;
                         }
                     }
@@ -870,7 +935,7 @@ namespace AdvancedSpamBot
             {
                 MessageBox.Show("Invalid file");
             }
-            
+
         }
 
         private void onStartWaitCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -961,7 +1026,7 @@ namespace AdvancedSpamBot
         private void exportVariablesButton_Click(object sender, EventArgs e)
         {
             Dictionary<string, int> d = new Dictionary<string, int>(VariableBox.VariablesDictionary);
-            
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Title = "Save file:";
             saveFileDialog.Filter = "Json (*.json)|*.json";
@@ -1011,6 +1076,6 @@ namespace AdvancedSpamBot
             }
         }
 
-        
+
     }
 }
