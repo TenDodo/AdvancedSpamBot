@@ -118,7 +118,7 @@ namespace AdvancedSpamBot
         List<KeyValuePair<CommandBoxType, string>> commands = new List<KeyValuePair<CommandBoxType, string>>();
         private void startButton_Click(object sender, EventArgs e)
         {
-            if (!IsRunning)
+            if (!IsRunning && !botBackgroundWorker.IsBusy)
             {
                 do
                 {
@@ -223,6 +223,7 @@ namespace AdvancedSpamBot
                 }
                 ReportState = commands.Count.ToString() + " command blocks";
                 startButton.Text = "Stop";
+                preview.stopButton.Text = "Stop";
                 vd = new Dictionary<string, int>(VariableBox.VariablesDictionary);
                 if (previewWindowCheckBox.Checked)
                 {
@@ -233,8 +234,12 @@ namespace AdvancedSpamBot
             }
             else
             {
+                if (!IsRunning && botBackgroundWorker.IsBusy)
+                {
+                    startButton.Text = "Finishing...";
+                    preview.stopButton.Text = "Finishing...";
+                }
                 StopWorker();
-                startButton.Text = "Start";
             }
         }
 
@@ -488,7 +493,6 @@ namespace AdvancedSpamBot
                             default:
                                 ReportState = "Writing IP address";
                                 int a = int.Parse(new string(item.Value.Replace("IPv6", "").Replace("IPv4", "").Where(char.IsDigit).ToArray()));
-                                Debug.WriteLine(a);
                                 String strHostName = Dns.GetHostName();
                                 IPHostEntry ipEntry = Dns.GetHostEntry(strHostName);
                                 Debug.WriteLine("Length " + ipEntry.AddressList.Length);
